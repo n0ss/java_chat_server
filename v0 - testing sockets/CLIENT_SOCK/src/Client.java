@@ -28,7 +28,8 @@ public class Client {
 
              in.close(); out.close(); client.close();
 
-         } catch (Exception e) {System.out.println("Client error");}
+         }
+         catch (Exception e) {System.out.println("Client error");}
  
     }
  
