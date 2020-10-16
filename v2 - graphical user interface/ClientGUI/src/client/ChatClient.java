@@ -153,6 +153,7 @@ class GUI {
 				buttonSend.setEnabled(true);
 				buttonName.setEnabled(false);
 				frame.getRootPane().setDefaultButton(buttonSend);
+				fieldInput.requestFocusInWindow();
 			}
 		});
 		panelName.add(buttonName);
