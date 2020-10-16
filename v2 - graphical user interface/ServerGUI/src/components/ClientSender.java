@@ -35,7 +35,6 @@ public class ClientSender implements Runnable {
 		synchronized (mMessageQueue) {
 			mOut.println(nextMessageFromQueue());
 			mMessageQueue.removeElementAt(0);
-			//notify();
 		}
 		
 	}
@@ -44,7 +43,6 @@ public class ClientSender implements Runnable {
 		// TODO Auto-generated method stub
 		synchronized (mMessageQueue) {
 			mMessageQueue.add(message);
-			//notify();
 		}
 		
 	}

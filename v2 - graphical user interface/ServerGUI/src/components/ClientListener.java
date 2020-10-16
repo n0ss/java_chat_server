@@ -67,7 +67,6 @@ public class ClientListener implements Runnable {
 							
 							synchronized (mServerDispatcher) {
 								mServerDispatcher.dispatchPrivateMessage("PM: "+mClientInfo.pseudo+" > "+message,dest);
-								//notify();
 							}
 						}
 						else if (message.substring(1).startsWith("shout ")) {
@@ -77,20 +76,17 @@ public class ClientListener implements Runnable {
 							
 							synchronized (mServerDispatcher) {
 								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
-								//notify();
 							}
 						}
 						else {
 							synchronized (mServerDispatcher) {
 								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
-								//notify();
 							}
 						}
 					}
 					else {
 						synchronized (mServerDispatcher) {
 							mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
-							//notify();
 						}
 					}
 						

@@ -27,7 +27,6 @@ public class ChatServer {
             Socket new_client;
             
             while (true) {
-            	//dispatcher.printClients();
             	
                 new_client = server.accept();
                 System.out.println("Un client s'est connecté.");

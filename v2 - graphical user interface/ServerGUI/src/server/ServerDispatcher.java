@@ -9,14 +9,12 @@ public class ServerDispatcher implements Runnable {
 	
 	private Vector<String> mMessageQueue;
 	private Vector<ClientInfo> mClients;
-	//private ClientSender mServerDispatcher;
 	
 	public ServerDispatcher() {
 		// TODO Auto-generated constructor stub
 		
 		mMessageQueue = new Vector<String>();
 		mClients = new Vector<ClientInfo>();
-		//mServerDispatcher = new ClientSender();
 	}
 	
 	public void addClient(Socket client) {
@@ -25,7 +23,6 @@ public class ServerDispatcher implements Runnable {
 		
 		synchronized (mClients) {
 			mClients.add(new_info);
-			//notify();
 		}
 		
 	}
@@ -34,7 +31,6 @@ public class ServerDispatcher implements Runnable {
 		// TODO Auto-generated method stub
 		synchronized (mClients) {
 			mClients.removeElement(old_client);
-			//notify();
 			
 			System.out.println("Un client s'est déconnecté : " + old_client.pseudo+".");
 		}
@@ -62,7 +58,6 @@ public class ServerDispatcher implements Runnable {
 		// TODO Auto-generated method stub
 		synchronized (mMessageQueue) {
 			mMessageQueue.add(message);
-			//notify();
 		}
 		
 	}
