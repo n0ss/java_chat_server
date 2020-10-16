@@ -14,9 +14,11 @@ This is a simple project to test socket in Java, providing only 1 server and 1 c
 # Folder v1_...
 
 This is a project that responds to the specifications, implementing also a simple protocol that allows users to send PMs, to shout, and to exit the chat.
+
 Test /help on a client.
 
 # Folder v2_...
 
 This is a project that provides a GUI on the clients, the GUI prevents you from exiting the program until you have properly disconnected.
+
 Test /help on a client.
