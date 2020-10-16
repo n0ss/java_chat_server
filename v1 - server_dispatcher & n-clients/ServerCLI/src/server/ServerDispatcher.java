@@ -4,7 +4,6 @@ import java.net.Socket;
 import java.util.Vector;
 
 import components.ClientInfo;
-import components.ClientSender;
 
 public class ServerDispatcher implements Runnable {
 	
@@ -24,23 +23,71 @@ public class ServerDispatcher implements Runnable {
 		// TODO Auto-generated method stub
 		ClientInfo new_info = new ClientInfo(client,this);
 		
-		mClients.add(new_info);		
+		synchronized (mClients) {
+			mClients.add(new_info);
+			//notify();
+		}
 		
 	}
 	
-	public void deleteClient() {
+	public void deleteClient(ClientInfo old_client) {
 		// TODO Auto-generated method stub
-
+		synchronized (mClients) {
+			mClients.removeElement(old_client);
+			//notify();
+			
+			System.out.println("Un client s'est déconnecté : " + old_client.pseudo+".");
+		}
+		printClients();
+		
 	}
 	
-	public void dispatchMessage() {
+	public void printClients() {
 		// TODO Auto-generated method stub
-
+		System.out.println("---------- CLIENTS ACTIFS ----------");
+		synchronized (mClients ) {
+			for (ClientInfo client: mClients) {
+				printClient(client);
+			}
+		}
+		System.out.println("------------------------------------\n");
+	}
+	
+	private void printClient(ClientInfo client) {
+		// TODO Auto-generated method stub
+		System.out.println("\t\t"+client.pseudo);		
+	}
+	
+	public void dispatchMessage(String message) {
+		// TODO Auto-generated method stub
+		synchronized (mMessageQueue) {
+			mMessageQueue.add(message);
+			//notify();
+		}
+		
+	}
+	
+	public void dispatchPrivateMessage(String message, String dest ) {
+		for (ClientInfo client: mClients) {
+			if (client.pseudo.equals(dest)) {
+				client.mClientSender.sendMessage(message);
+			}
+		}
 	}
 	
 	private void sendMessageToAllClients() {
 		// TODO Auto-generated method stub
-
+		
+		String message = nextMessageFromQueue();
+		
+		for (ClientInfo client: mClients) {
+			client.mClientSender.sendMessage(message);
+		}
+		
+		synchronized (mMessageQueue) {			
+			mMessageQueue.removeElement(message);
+		}
+		
 	}
 	
 	private String nextMessageFromQueue() {
@@ -53,7 +100,16 @@ public class ServerDispatcher implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		
-		
+		while (true) {
+			
+			if (!mMessageQueue.isEmpty()) {
+				sendMessageToAllClients();
+			}
+			else {
+				
+			}
+			
+		}
 		
 	}
 	

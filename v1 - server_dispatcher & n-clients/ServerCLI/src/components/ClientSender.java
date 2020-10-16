@@ -24,6 +24,7 @@ public class ClientSender implements Runnable {
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Erreur Serveur ClientSender() : constructeur");
 			e.printStackTrace();
 		}
 		
@@ -31,24 +32,41 @@ public class ClientSender implements Runnable {
 	
 	private void sendMessageToClient() {
 		// TODO Auto-generated method stub
-
+		synchronized (mMessageQueue) {
+			mOut.println(nextMessageFromQueue());
+			mMessageQueue.removeElementAt(0);
+			//notify();
+		}
+		
 	}
 	
-	public void sendMessage() {
+	public void sendMessage(String message) {
 		// TODO Auto-generated method stub
-
+		synchronized (mMessageQueue) {
+			mMessageQueue.add(message);
+			//notify();
+		}
+		
 	}
 	
 	private String nextMessageFromQueue() {
 		// TODO Auto-generated method stub
 
-		return null;
+		return mMessageQueue.firstElement();
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		
+		while (!mClientInfo.mSocket.isClosed()) {
+			
+			if (!mMessageQueue.isEmpty()) {
+				sendMessageToClient();
+			}
+			
+			
+		}
 	}
 
 }
