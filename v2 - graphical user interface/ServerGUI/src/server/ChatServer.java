@@ -8,8 +8,6 @@ import java.util.Scanner;
 public class ChatServer {
 	
 	public static final int LISTENING_PORT = 5555;
-	
-	
 
 	public static void main(String[] args) {
 		
