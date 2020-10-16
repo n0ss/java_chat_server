@@ -55,9 +55,7 @@ public class ChatClient {
 			BufferedReader mIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
 			String chat_output = "0";
-			
-			//window.getChatArea().append("INFO > Veuillez choisir votre pseudo et cliquer sur -Envoyer-.");
-			
+						
 			while (chat_output!=null) {
 				
 				try {
@@ -65,7 +63,7 @@ public class ChatClient {
 					
 					window.getChatArea().append(chat_output+"\n");
 					
-					//System.out.println(chat_output);
+					//OLD CLI System.out.println(chat_output);
 				}
 				catch (SocketException e) {
 					// TODO Auto-generated catch block
@@ -105,9 +103,7 @@ class GUI {
 	private JPanel panelInput;
 	private JTextField fieldInput;
 	private JButton buttonSend;
-	
-	private boolean pseudo = false;;
-	
+		
 	public GUI() {
 		initialize();
 	}

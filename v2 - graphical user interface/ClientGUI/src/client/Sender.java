@@ -42,10 +42,10 @@ public class Sender implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		
-		//Scanner scan = new Scanner(System.in);
+		//OLD CLI Scanner scan = new Scanner(System.in);
 		
-		//System.out.print("Choisissez un pseudo : ");
-		//mOut.println(scan.nextLine());
+		//OLD CLI System.out.print("Choisissez un pseudo : ");
+		//OLD CLI mOut.println(scan.nextLine());
 
 		while (!mSocket.isClosed()) {
 			
@@ -56,7 +56,7 @@ public class Sender implements Runnable {
 			}
 		}
 		
-		//scan.close();
+		//OLD CLI scan.close();
 		
 	}
 

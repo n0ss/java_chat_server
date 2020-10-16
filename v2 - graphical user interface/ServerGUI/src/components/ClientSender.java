@@ -62,9 +62,7 @@ public class ClientSender implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
-		
-		//sendMessage("SERVER > Veuillez choisir votre pseudo et cliquer sur \'Envoyer\'.");
-		
+				
 		while (!mClientInfo.mSocket.isClosed()) {
 			
 			if (!mMessageQueue.isEmpty()) {
