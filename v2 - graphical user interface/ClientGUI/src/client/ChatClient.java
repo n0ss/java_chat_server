@@ -75,7 +75,8 @@ public class ChatClient {
 				
 			}
 			
-			window.getChatArea().append("Client déconnecté. Vous pouvez fermer la fenêtre.");
+			socket.close();
+			window.getChatArea().append("Client dï¿½connectï¿½. Vous pouvez fermer la fenï¿½tre.");
 			window.allowExit();
 			
 		} catch (IOException e) {
