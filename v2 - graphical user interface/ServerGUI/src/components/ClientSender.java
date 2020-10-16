@@ -47,6 +47,12 @@ public class ClientSender implements Runnable {
 		
 	}
 	
+	public void welcomeMessage () {
+		synchronized (mMessageQueue) {
+			mMessageQueue.add("SERVER > Bienvenue sur le chat "+mClientInfo.pseudo+" !");
+		}
+	}
+	
 	private String nextMessageFromQueue() {
 		// TODO Auto-generated method stub
 
@@ -56,6 +62,8 @@ public class ClientSender implements Runnable {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
+		
+		//sendMessage("SERVER > Veuillez choisir votre pseudo et cliquer sur \'Envoyer\'.");
 		
 		while (!mClientInfo.mSocket.isClosed()) {
 			

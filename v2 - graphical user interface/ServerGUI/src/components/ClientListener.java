@@ -39,12 +39,14 @@ public class ClientListener implements Runnable {
 			message = mIn.readLine();
 			mClientInfo.pseudo = message;
 			mServerDispatcher.printClients();
+			mClientInfo.mClientSender.welcomeMessage();
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			System.out.println("Erreur Serveur ClientListener() : attribution du pseudo");
 			e1.printStackTrace();
 		}
+		
 		
 		while (!mClientInfo.mSocket.isClosed()) {
 			

@@ -6,11 +6,13 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.Vector;
 
 public class Sender implements Runnable {
 	
 	private static PrintWriter mOut;
 	private static Socket mSocket;
+	private static Vector<String> mMessageQueue;
 	
 	public Sender(Socket sock) {
 		// TODO Auto-generated constructor stub
@@ -18,31 +20,43 @@ public class Sender implements Runnable {
 		try {
 			mOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(sock.getOutputStream())),true);
 			mSocket = sock;
+			mMessageQueue = new Vector<String>();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Erreur Client - Sender() : constructeur");
 			e.printStackTrace();
 		}
 	}
+	
+	public void pushMessage (String message) {
+		synchronized (mMessageQueue) {
+			mMessageQueue.add(message);
+		}
+	}
+	
+	private String popMessage () {
+		return mMessageQueue.remove(0);
+	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		
-		Scanner scan = new Scanner(System.in);
+		//Scanner scan = new Scanner(System.in);
 		
-		System.out.print("Choisissez un pseudo : ");
-		mOut.println(scan.nextLine());
+		//System.out.print("Choisissez un pseudo : ");
+		//mOut.println(scan.nextLine());
 
 		while (!mSocket.isClosed()) {
-			if (scan.hasNextLine()) {
-				
-				mOut.println(scan.nextLine());
-				
+			
+			if (!mMessageQueue.isEmpty()) {
+				synchronized (mMessageQueue) {
+					mOut.println(popMessage());
+				}
 			}
 		}
 		
-		scan.close();
+		//scan.close();
 		
 	}
 
