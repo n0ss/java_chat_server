@@ -80,6 +80,14 @@ public class ClientListener implements Runnable {
 								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
 							}
 						}
+						else if (message.substring(1).startsWith("help")) {
+							
+							mClientInfo.mClientSender.sendMessage("INFO > /pm pseudo message : Envoyer un message privé");
+							mClientInfo.mClientSender.sendMessage("INFO > /shout message : Envoyer un message en CAPSLOCK");
+							mClientInfo.mClientSender.sendMessage("INFO > /help : Afficher l'aide");
+							mClientInfo.mClientSender.sendMessage("INFO > /exit : Déconnecter la session");
+							
+						}
 						else {
 							synchronized (mServerDispatcher) {
 								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);

@@ -76,7 +76,7 @@ public class ChatClient {
 			}
 			
 			window.getChatArea().append("Client déconnecté. Vous pouvez fermer la fenêtre.");
-			
+			window.allowExit();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -117,6 +117,10 @@ class GUI {
 	
 	public JTextArea getChatArea() {
 		return chatArea;
+	}
+	
+	public void allowExit () {
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	private void initialize() {
