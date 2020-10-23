@@ -91,6 +91,7 @@ public class ClientListener implements Runnable {
 							mClientInfo.mClientSender.sendMessage("INFO > /pm pseudo message : Envoyer un message privï¿½");
 							mClientInfo.mClientSender.sendMessage("INFO > /shout message : Envoyer un message en CAPSLOCK");
 							mClientInfo.mClientSender.sendMessage("INFO > /help : Afficher l'aide");
+							mClientInfo.mClientSender.sendMessage("INFO > /list : Lister les utilisateurs connectés");
 							mClientInfo.mClientSender.sendMessage("INFO > /exit : Dï¿½connecter la session");
 							
 						}
