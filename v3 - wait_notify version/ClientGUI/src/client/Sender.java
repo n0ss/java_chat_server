@@ -28,9 +28,10 @@ public class Sender implements Runnable {
 		}
 	}
 	
-	public void pushMessage (String message) {
+	public synchronized void pushMessage (String message) {
 		synchronized (mMessageQueue) {
 			mMessageQueue.add(message);
+			this.notify();
 		}
 	}
 	
@@ -39,7 +40,7 @@ public class Sender implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		// TODO Auto-generated method stub
 		
 		//OLD CLI Scanner scan = new Scanner(System.in);
@@ -52,6 +53,14 @@ public class Sender implements Runnable {
 			if (!mMessageQueue.isEmpty()) {
 				synchronized (mMessageQueue) {
 					mOut.println(popMessage());
+				}
+			}
+			else {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

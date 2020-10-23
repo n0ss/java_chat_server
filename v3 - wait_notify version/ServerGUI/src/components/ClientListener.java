@@ -30,7 +30,7 @@ public class ClientListener implements Runnable {
 	}
 	
 	@Override
-	public void run() {
+	public synchronized void run() {
 		// TODO Auto-generated method stub
 		
 		String message;
@@ -39,7 +39,7 @@ public class ClientListener implements Runnable {
 			message = mIn.readLine();
 			mClientInfo.pseudo = message;
 			mServerDispatcher.printClients();
-			mServerDispatcher.dispatchMessage(mClientInfo.getWelcomeMessage());
+			mClientInfo.mClientSender.welcomeMessage();
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -69,6 +69,7 @@ public class ClientListener implements Runnable {
 							
 							synchronized (mServerDispatcher) {
 								mServerDispatcher.dispatchPrivateMessage("PM: "+mClientInfo.pseudo+" > "+message,dest);
+								mServerDispatcher.notify();
 							}
 						}
 						else if (message.substring(1).startsWith("shout ")) {
@@ -78,12 +79,7 @@ public class ClientListener implements Runnable {
 							
 							synchronized (mServerDispatcher) {
 								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
-							}
-						}
-						else if (message.substring(1).startsWith("list")) {
-														
-							synchronized (mServerDispatcher) {
-								mServerDispatcher.sendClientList(mClientInfo.pseudo);
+								mServerDispatcher.notify();
 							}
 						}
 						else if (message.substring(1).startsWith("help")) {
@@ -92,17 +88,20 @@ public class ClientListener implements Runnable {
 							mClientInfo.mClientSender.sendMessage("INFO > /shout message : Envoyer un message en CAPSLOCK");
 							mClientInfo.mClientSender.sendMessage("INFO > /help : Afficher l'aide");
 							mClientInfo.mClientSender.sendMessage("INFO > /exit : D�connecter la session");
+							mClientInfo.mClientSender.notify();
 							
 						}
 						else {
 							synchronized (mServerDispatcher) {
 								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
+								mServerDispatcher.notify();
 							}
 						}
 					}
 					else {
 						synchronized (mServerDispatcher) {
 							mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
+							mServerDispatcher.notify();
 						}
 					}
 						

@@ -28,9 +28,5 @@ public class ClientInfo {
 		t_listener.setPriority(Thread.NORM_PRIORITY);
 		t_sender.start();
 	}
-	
-	public String getWelcomeMessage () {
-		return "SERVER > Bienvenue sur le chat "+this.pseudo+" !";
-	}
 
 }

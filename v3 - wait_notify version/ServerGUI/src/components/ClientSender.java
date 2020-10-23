@@ -35,6 +35,7 @@ public class ClientSender implements Runnable {
 		synchronized (mMessageQueue) {
 			mOut.println(nextMessageFromQueue());
 			mMessageQueue.removeElementAt(0);
+			
 		}
 		
 	}
@@ -60,13 +61,21 @@ public class ClientSender implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		// TODO Auto-generated method stub
 				
 		while (!mClientInfo.mSocket.isClosed()) {
 			
 			if (!mMessageQueue.isEmpty()) {
 				sendMessageToClient();
+			}
+			else {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 			

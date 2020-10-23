@@ -54,57 +54,41 @@ public class ServerDispatcher implements Runnable {
 		System.out.println("\t\t"+client.pseudo);		
 	}
 	
-	public void dispatchMessage(String message) {
+	public synchronized void dispatchMessage(String message) {
 		// TODO Auto-generated method stub
 		synchronized (mMessageQueue) {
 			mMessageQueue.add(message);
+			this.notify();
 		}
 		
 	}
 	
-	public void dispatchPrivateMessage(String message, String dest ) {
+	public synchronized void dispatchPrivateMessage(String message, String dest ) {
 		for (ClientInfo client: mClients) {
 			if (client.pseudo.equals(dest)) {
 				client.mClientSender.sendMessage(message);
+				client.mClientSender.notify();
 			}
 		}
 	}
 	
-	public void sendClientList(String dest) {
-		for (ClientInfo client: mClients) {
-			if (client.pseudo.equals(dest)) {
-				client.mClientSender.sendMessage(getClientsList());
-			}
-		}
-	}
-	
-	private String getClientsList () {
-		String list = "";
-		
-		list += "SERVER > ----------- CLIENTS ACTIFS -----------\n";
-		
-		synchronized (mClients) {
-			for (ClientInfo client: mClients) {
-				list = list + ("SERVER > \t\t"+client.pseudo+"\n");
-			}
-		}
-		
-		list += "SERVER > ------------------------------------";
-		
-		return list;
-	}
-	
-	private void sendMessageToAllClients() {
+	private synchronized void sendMessageToAllClients() {
 		// TODO Auto-generated method stub
 		
-		String message = nextMessageFromQueue();
+		String message;
 		
-		for (ClientInfo client: mClients) {
-			client.mClientSender.sendMessage(message);
+		synchronized (mMessageQueue) {
+			message = nextMessageFromQueue();
+			mMessageQueue.removeElement(message);
 		}
 		
-		synchronized (mMessageQueue) {			
-			mMessageQueue.removeElement(message);
+		synchronized (mClients) {	
+			for (ClientInfo client: mClients) {
+				client.mClientSender.sendMessage(message);
+				client.mClientSender.notify();
+			}
+			
+			
 		}
 		
 	}
@@ -116,7 +100,7 @@ public class ServerDispatcher implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public synchronized void run() {
 		// TODO Auto-generated method stub
 		
 		while (true) {
@@ -125,7 +109,12 @@ public class ServerDispatcher implements Runnable {
 				sendMessageToAllClients();
 			}
 			else {
-				
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 		}
