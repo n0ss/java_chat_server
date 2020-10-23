@@ -32,7 +32,7 @@ public class ServerDispatcher implements Runnable {
 		synchronized (mClients) {
 			mClients.removeElement(old_client);
 			
-			System.out.println("Un client s'est d�connect� : " + old_client.pseudo+".");
+			System.out.println("Un client s'est déconnecté : " + old_client.pseudo+".");
 		}
 		printClients();
 		

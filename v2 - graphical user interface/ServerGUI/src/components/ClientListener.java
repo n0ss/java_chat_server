@@ -88,11 +88,11 @@ public class ClientListener implements Runnable {
 						}
 						else if (message.substring(1).startsWith("help")) {
 							
-							mClientInfo.mClientSender.sendMessage("INFO > /pm pseudo message : Envoyer un message priv�");
+							mClientInfo.mClientSender.sendMessage("INFO > /pm pseudo message : Envoyer un message privé");
 							mClientInfo.mClientSender.sendMessage("INFO > /shout message : Envoyer un message en CAPSLOCK");
 							mClientInfo.mClientSender.sendMessage("INFO > /help : Afficher l'aide");
-							mClientInfo.mClientSender.sendMessage("INFO > /list : Lister les utilisateurs connect�s");
-							mClientInfo.mClientSender.sendMessage("INFO > /exit : D�connecter la session");
+							mClientInfo.mClientSender.sendMessage("INFO > /list : Lister les utilisateurs connectés");
+							mClientInfo.mClientSender.sendMessage("INFO > /exit : Déconnecter la session");
 							
 						}
 						else {
@@ -111,7 +111,7 @@ public class ClientListener implements Runnable {
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				System.out.println("Erreur Serveur ClientListener() : r�cup�ration message - dispatch");
+				System.out.println("Erreur Serveur ClientListener() : récupération message - dispatch");
 				e.printStackTrace();
 			}
 		}
