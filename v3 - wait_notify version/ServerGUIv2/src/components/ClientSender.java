@@ -35,15 +35,15 @@ public class ClientSender implements Runnable {
 		synchronized (mMessageQueue) {
 			mOut.println(nextMessageFromQueue());
 			mMessageQueue.removeElementAt(0);
-			
 		}
 		
 	}
 	
 	public void sendMessage(String message) {
 		// TODO Auto-generated method stub
-		synchronized (mMessageQueue) {
+		synchronized (this) {
 			mMessageQueue.add(message);
+			this.notify();
 		}
 		
 	}
@@ -61,7 +61,7 @@ public class ClientSender implements Runnable {
 	}
 
 	@Override
-	public synchronized void run() {
+	public void run() {
 		// TODO Auto-generated method stub
 				
 		while (!mClientInfo.mSocket.isClosed()) {
@@ -70,12 +70,16 @@ public class ClientSender implements Runnable {
 				sendMessageToClient();
 			}
 			else {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				synchronized (this) {
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				
 			}
 			
 			

@@ -4,11 +4,13 @@ import java.net.Socket;
 import java.util.Vector;
 
 import components.ClientInfo;
+import components.ClientSender;
 
 public class ServerDispatcher implements Runnable {
 	
 	private Vector<String> mMessageQueue;
 	private Vector<ClientInfo> mClients;
+	private ClientSender mServerDispatcher;
 	
 	public ServerDispatcher() {
 		// TODO Auto-generated constructor stub
@@ -23,6 +25,8 @@ public class ServerDispatcher implements Runnable {
 		
 		synchronized (mClients) {
 			mClients.add(new_info);
+			
+			mServerDispatcher = mClients.firstElement().mClientSender;
 		}
 		
 	}
@@ -32,7 +36,10 @@ public class ServerDispatcher implements Runnable {
 		synchronized (mClients) {
 			mClients.removeElement(old_client);
 			
-			System.out.println("Un client s'est d�connect� : " + old_client.pseudo+".");
+			if (!mClients.isEmpty()) {mServerDispatcher = mClients.firstElement().mClientSender;}
+			else {mServerDispatcher = null;}
+			
+			System.out.println("Un client s'est déconnecté : " + old_client.pseudo+".");
 		}
 		printClients();
 		
@@ -54,41 +61,69 @@ public class ServerDispatcher implements Runnable {
 		System.out.println("\t\t"+client.pseudo);		
 	}
 	
-	public synchronized void dispatchMessage(String message) {
+	public void dispatchMessage(String message) {
 		// TODO Auto-generated method stub
-		synchronized (mMessageQueue) {
+		synchronized (this) {
 			mMessageQueue.add(message);
 			this.notify();
 		}
 		
 	}
 	
-	public synchronized void dispatchPrivateMessage(String message, String dest ) {
+	public void dispatchPrivateMessage(String message, String dest ) {
+		
 		for (ClientInfo client: mClients) {
 			if (client.pseudo.equals(dest)) {
-				client.mClientSender.sendMessage(message);
-				client.mClientSender.notify();
+				
+				synchronized (client.mClientSender) {
+					client.mClientSender.sendMessage(message);
+					client.mClientSender.notify();
+				}
+				
 			}
 		}
 	}
 	
-	private synchronized void sendMessageToAllClients() {
+	public void sendClientList(String dest) {
+		for (ClientInfo client: mClients) {
+			if (client.pseudo.equals(dest)) {
+				client.mClientSender.sendMessage(getClientsList());
+			}
+		}
+	}
+	
+	private String getClientsList () {
+		String list = "";
+		
+		list += "SERVER > ----------- CLIENTS ACTIFS -----------\n";
+		
+		synchronized (mClients) {
+			for (ClientInfo client: mClients) {
+				list = list + ("SERVER > \t\t"+client.pseudo+"\n");
+			}
+		}
+		
+		list += "SERVER > ------------------------------------";
+		
+		return list;
+	}
+	
+	private void sendMessageToAllClients() {
 		// TODO Auto-generated method stub
 		
 		String message;
 		
-		synchronized (mMessageQueue) {
+		synchronized (mServerDispatcher) {
+			
 			message = nextMessageFromQueue();
 			mMessageQueue.removeElement(message);
-		}
-		
-		synchronized (mClients) {	
+			
 			for (ClientInfo client: mClients) {
 				client.mClientSender.sendMessage(message);
-				client.mClientSender.notify();
+				
 			}
 			
-			
+			mServerDispatcher.notifyAll();
 		}
 		
 	}
@@ -100,7 +135,7 @@ public class ServerDispatcher implements Runnable {
 	}
 
 	@Override
-	public synchronized void run() {
+	public void run() {
 		// TODO Auto-generated method stub
 		
 		while (true) {
@@ -109,12 +144,16 @@ public class ServerDispatcher implements Runnable {
 				sendMessageToAllClients();
 			}
 			else {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				synchronized (this) {
+					try {
+						this.wait();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				
 			}
 			
 		}

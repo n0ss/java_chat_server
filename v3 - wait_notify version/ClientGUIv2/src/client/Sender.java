@@ -28,11 +28,8 @@ public class Sender implements Runnable {
 		}
 	}
 	
-	public synchronized void pushMessage (String message) {
-		synchronized (mMessageQueue) {
-			mMessageQueue.add(message);
-			this.notify();
-		}
+	public void pushMessage (String message) {
+		mMessageQueue.add(message);
 	}
 	
 	private String popMessage () {
@@ -56,12 +53,7 @@ public class Sender implements Runnable {
 				}
 			}
 			else {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				
 			}
 		}
 		

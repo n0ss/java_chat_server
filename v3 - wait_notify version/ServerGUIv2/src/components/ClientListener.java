@@ -30,7 +30,7 @@ public class ClientListener implements Runnable {
 	}
 	
 	@Override
-	public synchronized void run() {
+	public void run() {
 		// TODO Auto-generated method stub
 		
 		String message;
@@ -39,7 +39,7 @@ public class ClientListener implements Runnable {
 			message = mIn.readLine();
 			mClientInfo.pseudo = message;
 			mServerDispatcher.printClients();
-			mClientInfo.mClientSender.welcomeMessage();
+			mServerDispatcher.dispatchMessage(mClientInfo.getWelcomeMessage());
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -67,42 +67,37 @@ public class ClientListener implements Runnable {
 							
 							message = message.substring(dest.length()+1,message.length());
 							
-							synchronized (mServerDispatcher) {
-								mServerDispatcher.dispatchPrivateMessage("PM: "+mClientInfo.pseudo+" > "+message,dest);
-								mServerDispatcher.notify();
-							}
+							mServerDispatcher.dispatchPrivateMessage("PM: "+mClientInfo.pseudo+" > "+message,dest);
+							
 						}
 						else if (message.substring(1).startsWith("shout ")) {
 							message = message.substring(7, message.length());
 							
 							message = message.toUpperCase();
 							
-							synchronized (mServerDispatcher) {
-								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
-								mServerDispatcher.notify();
-							}
+							mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
+							
+						}
+						else if (message.substring(1).startsWith("list")) {
+							
+							mServerDispatcher.sendClientList(mClientInfo.pseudo);
 						}
 						else if (message.substring(1).startsWith("help")) {
 							
-							mClientInfo.mClientSender.sendMessage("INFO > /pm pseudo message : Envoyer un message priv�");
+							mClientInfo.mClientSender.sendMessage("INFO > /pm pseudo message : Envoyer un message privé");
 							mClientInfo.mClientSender.sendMessage("INFO > /shout message : Envoyer un message en CAPSLOCK");
+							mClientInfo.mClientSender.sendMessage("INFO > /list : Lister les utilisateurs connectés");
 							mClientInfo.mClientSender.sendMessage("INFO > /help : Afficher l'aide");
-							mClientInfo.mClientSender.sendMessage("INFO > /exit : D�connecter la session");
-							mClientInfo.mClientSender.notify();
+							mClientInfo.mClientSender.sendMessage("INFO > /exit : Déconnecter la session");
 							
 						}
 						else {
-							synchronized (mServerDispatcher) {
-								mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
-								mServerDispatcher.notify();
-							}
+							mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
+							
 						}
 					}
 					else {
-						synchronized (mServerDispatcher) {
-							mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
-							mServerDispatcher.notify();
-						}
+						mServerDispatcher.dispatchMessage(mClientInfo.pseudo+" > "+message);
 					}
 						
 				}
