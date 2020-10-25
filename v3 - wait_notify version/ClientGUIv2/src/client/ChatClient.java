@@ -74,7 +74,7 @@ public class ChatClient {
 			}
 			
 			socket.close();
-			window.getChatArea().append("Client d�connect�. Vous pouvez fermer la fen�tre.");
+			window.getChatArea().append("Client déconnecté. Vous pouvez fermer la fenêtre.");
 			window.allowExit();
 			
 		} catch (IOException e) {
@@ -191,7 +191,7 @@ class GUI {
 		});
 		panelInput.add(buttonSend);
 		
-		chatArea.append("INFO > Veuillez choisir votre pseudo et cliquer sur 'Envoyer'.\n");
+		chatArea.append("INFO > Veuillez choisir votre pseudo et cliquer sur 'Connexion'.\n");
 		
 		frame.setBounds(100, 100, 640, 480);
 		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

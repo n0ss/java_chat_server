@@ -104,7 +104,7 @@ public class ClientListener implements Runnable {
 				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				System.out.println("Erreur Serveur ClientListener() : r�cup�ration message - dispatch");
+				System.out.println("Erreur Serveur ClientListener() : récupération message - dispatch");
 				e.printStackTrace();
 			}
 		}
