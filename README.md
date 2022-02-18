@@ -22,3 +22,7 @@ Test /help on a client.
 This is a project that provides a GUI on the clients, the GUI prevents you from exiting the program until you have properly disconnected.
 
 Test /help on a client.
+
+# Folder v3_...
+
+Implementation of wait()/notify() commands in the code for optimization and proper use of threads.
